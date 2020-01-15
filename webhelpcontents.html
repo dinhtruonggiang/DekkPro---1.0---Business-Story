@@ -1,0 +1,394 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<title>WheelPro - DekkPro 1.0 - Business Story</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style type="text/css"> 
+<!--
+body{margin: 5px;} 
+.selected {font-weight: normal;background-color: #E2E2E2;padding:0px,2px,0px,2px;}
+.unselected { font-weight: normal;padding:0px,2px,0px,2px;}
+.hand { cursor: hand; }
+.p {height: 16px;width: 16px;vertical-align: middle;border: 0;}
+div,body { font-family: Tahoma, Verdana; font-size: 11px; }
+A:link {text-decoration: none; color:#000000}
+A:visited {text-decoration: none; color: #000000}
+A:active {text-decoration: none; color: #000000 }
+A:hover {text-decoration: none; color: #FF0000 }
+
+-->
+</style>
+
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+var cl,pn,pm,bl;
+var path = 'icons/';
+var pos = 0;
+var icon;
+var tar = 'content';
+var display;
+var imgi;
+var AutoCollapse;
+var LastSelected = -1;
+var loaded = false;
+var max;
+var divlist;
+
+function SetEnv(v,a){
+
+if(v==0){ 
+	pn = [['daplus.gif','daminus.gif'],['tplus.gif','tminus.gif'],['uaplus.gif','uaminus.gif'],['splus.gif','sminus.gif']];
+	PreloadImg('downangle.gif','tshaped.gif','upangle.gif','sline.gif','daplus.gif','daminus.gif','tplus.gif','tminus.gif','uaplus.gif','uaminus.gif','splus.gif','sminus.gif','blank.gif','line.gif');
+}else{
+	pn = [['plus.gif','minus.gif']];
+	PreloadImg('plus.gif','minus.gif','blank.gif');
+
+}
+AutoCollapse = a;
+}
+
+ function PreloadImg(){
+if (document.images) { 
+	var imgs = PreloadImg.arguments; 
+	var pload = new Array();
+	for (var i=0; i<imgs.length; i++) { 
+		pload[i] = new Image; 
+		pload[i].src = path + imgs[i]; 
+	} 
+} 
+ } 
+
+function get(o){
+var x;
+if(document.all) x=document.all[o]; 
+if(document.getElementById) x=document.getElementById(o);
+
+return x;
+}
+
+
+function pnImg(img){
+var i,j;
+for(i=0;i<=3;i++){
+	for(j=0;j<=1;j++){
+	if(img.substr(img.lastIndexOf('/') + 1)== pn[i][j]){
+		return i;
+	}
+	}
+}
+}
+function icon(img){
+var f;
+f = img.substr(img.lastIndexOf('/') + 1);
+if( f=='1.gif' || f=='2.gif'){
+	return ['1.gif','2.gif'];
+}
+if( f=='3.gif' || f=='4.gif'){
+	return ['3.gif','4.gif'];
+}
+if( f=='5.gif' || f=='6.gif'){
+	return ['5.gif','6.gif'];
+}
+if( f=='7.gif' || f=='8.gif'){
+	return ['7.gif','8.gif'];
+}
+return [f,f];
+}
+
+function show(id){
+get('d' + id).style.display='block';
+if(get('imgn' + id )) get('imgn' + id ).src= path + pn[pnImg(get('imgn' + id ).src)][1];
+get('img' + id ).src= path + icon(get('img' + id ).src)[1];
+
+}
+
+function collapse(id){
+get('d' + id ).style.display='none';
+if(get('imgn' + id )) get('imgn' + id ).src= path + pn[pnImg(get('imgn' + id ).src)][0];
+get('img' + id ).src= path + icon(get('img' + id ).src)[0];
+
+}
+
+function collapseAll(){
+var i;
+var o;
+for(i=0;i<=divlist.length-1;i++){
+	if(o=get('d' + divlist[i])){
+		if(o.style.display!='none'){ 
+			collapse(divlist[i]);
+		}
+	}
+}
+}
+
+function showAll(){
+var i;
+var o;
+for(i=0;i<=divlist.length-1;i++){
+	if(o=get('d' + divlist[i])){
+		if(o.style.display!='block'){ 
+			show(divlist[i]);
+		}
+	}
+}
+}
+
+function unselectAll(){
+var i=0;
+while(get("l" + i)){
+	get("l" + i).className = "unselected";
+	i++;
+}
+}
+
+function clickNode(index){
+var e;
+
+e = get("l" + index);
+if(e==null) return;
+e = e.parentNode;
+if(e.nodeName == 'A'){
+	if(e.href!= window.location.href + '#'){
+		parent.parent.content.location.href = e.href;
+	}else{
+		selectNode(index);
+	}
+	e.onclick;
+}
+}
+
+function showParent(ele){
+var e;
+e = ele.parentNode;
+
+if(e==null) return;
+
+if(e.nodeName == 'DIV'){
+	if(e.id!='') show(e.id.substring(1,e.id.length ));
+}else if(e.nodeName == 'A'){
+
+}
+showParent(e);
+}
+
+function showNode(index){
+showParent(get("l" + index));
+LinkClick(index);
+}
+
+function selectNode(index){
+if(LastSelected!=index){
+//collapseAll();
+showParent(get("l" + index));
+LinkClick(index);
+get('l' + index).scrollIntoView(true);
+
+
+//alert(get('l' + index).offsetHeight + '|' + document.body.clientHeight + '|' + document.body.offsetHeight);
+window.scrollTo(0,document.body.scrollTop); // - document.body.clientHeight /3);
+}
+}
+
+
+function NodeClick(id){
+if(get('d' + id ).style.display=='none'){
+	show(id);
+}else{
+	collapse(id);
+}
+return false;
+}
+
+function LinkDblClick(id){
+if(!AutoCollapse){
+	if(get('d' + id ).style.display=='none'){
+		show(id);
+	}else{
+		collapse(id);
+	}
+}
+return false;
+}
+
+function LinkClick(index,hasChild,r){
+if(AutoCollapse && hasChild){
+	if(get('d' + index ).style.display=='none'){
+		collapseAll()
+		showParent(get('l' + index));
+		show(index);
+	}else{
+		collapseAll()
+		showParent(get('l' + index));	
+		collapse(index);
+	}
+}
+if(LastSelected!=-1){
+	get('l' + LastSelected).className = "unselected";
+}
+get('l' + index).className = "selected";
+LastSelected = index;
+return r;
+}
+
+function body_onmousemove(event){
+if(typeof(document.body.scrollTop)!='undefined'){
+if(parseInt(event.clientX)<5){
+window.scroll(0,document.body.scrollTop);}}
+if(typeof(window.scrollY)!='undefined'){
+if(parseInt(event.clientX)<5){
+window.scrollTo(0,window.scrollY);}}
+}
+
+window.defaultStatus = '';
+
+function body_onload(){
+get('loading').style.display='none';
+loaded = true;
+if(parent.parent.content.document.readyState){
+	if(parent.parent.content.document.readyState == 'complete'){
+		try{parent.parent.content.syn();}catch(e){};
+	}
+}else{
+	if(parent.parent.contentLoaded){
+		try{parent.parent.content.syn();}catch(e){};
+	}
+}
+}
+
+//-->
+</SCRIPT>
+<script language="JavaScript" src="languages.js"></script>
+</head>
+
+<body bgcolor="#FFFFFF" onmousemove="body_onmousemove(event);" onload="body_onload();">
+<div id="loading"><font color="#FF0000" size="1"> Loading table of contents... 
+</font><br><br></div>
+<script>SetEnv(0,false)</script><div><nobr><img src="icons/downangle.gif" class="p"><a href="pages/system-overview.html" onclick="return LinkClick('0',false,true)" target="content" title="System overview" onmousemove="window.status='System overview'"><img src="icons/11.gif" class="p"> <span id="l0" class="unselected">System overview</span></a></nobr></div>
+<div><nobr><a href="#" onClick="return NodeClick('1')"><img id="imgn1" src="icons/tplus.gif" class="p"></a><a href="#" onclick="return LinkClick('1',true,false)" onDblClick="return LinkDblClick('1')" target="content" title="Some main products at a Dekkpro’s store:" onmousemove="window.status='Some main products at a Dekkpro’s store:'"><img id="img1" src="icons/1.gif" class="p"> <span id="l1" class="unselected">Some main products at a Dekkpro’s store:</span></a></nobr></div>
+<div id="d1" style="display:none"><div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/tires.html" onclick="return LinkClick('2',false,true)" target="content" title="Tires" onmousemove="window.status='Tires'"><img src="icons/11.gif" class="p"> <span id="l2" class="unselected">Tires</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/upangle.gif" class="p"><a href="pages/rims.html" onclick="return LinkClick('3',false,true)" target="content" title="Rims" onmousemove="window.status='Rims'"><img src="icons/11.gif" class="p"> <span id="l3" class="unselected">Rims</span></a></nobr></div>
+</div><div><nobr><a href="#" onClick="return NodeClick('4')"><img id="imgn4" src="icons/tplus.gif" class="p"></a><a href="#" onclick="return LinkClick('4',true,false)" onDblClick="return LinkDblClick('4')" target="content" title="Setup for a new store:" onmousemove="window.status='Setup for a new store:'"><img id="img4" src="icons/1.gif" class="p"> <span id="l4" class="unselected">Setup for a new store:</span></a></nobr></div>
+<div id="d4" style="display:none"><div><nobr><img src="icons/line.gif" class="p"><a href="#" onClick="return NodeClick('5')"><img id="imgn5" src="icons/uaplus.gif" class="p"></a><a href="pages/introduction.html" onclick="return LinkClick('5',true,true)" onDblClick="return LinkDblClick('5')" target="content" title="Introduction:" onmousemove="window.status='Introduction:'"><img id="img5" src="icons/1.gif" class="p"> <span id="l5" class="unselected">Introduction:</span></a></nobr></div>
+<div id="d5" style="display:none"><div><nobr><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><a href="#" onClick="return NodeClick('6')"><img id="imgn6" src="icons/uaplus.gif" class="p"></a><a href="#" onclick="return LinkClick('6',true,false)" onDblClick="return LinkDblClick('6')" target="content" title="Store configuration" onmousemove="window.status='Store configuration'"><img id="img6" src="icons/1.gif" class="p"> <span id="l6" class="unselected">Store configuration</span></a></nobr></div>
+<div id="d6" style="display:none"><div><nobr><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/registerupdate-store-information.html" onclick="return LinkClick('7',false,true)" target="content" title="Register/Update store information" onmousemove="window.status='Register/Update store information'"><img src="icons/11.gif" class="p"> <span id="l7" class="unselected">Register/Update store information</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/manage-printing-texts.html" onclick="return LinkClick('8',false,true)" target="content" title="Manage printing texts" onmousemove="window.status='Manage printing texts'"><img src="icons/11.gif" class="p"> <span id="l8" class="unselected">Manage printing texts</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/manage-stores-users-emails-opening-hours-deviation.html" onclick="return LinkClick('9',false,true)" target="content" title="Manage store’s users, emails, opening hours, deviation type &amp; customer privacy:" onmousemove="window.status='Manage store’s users, emails, opening hours, deviation type &amp; customer privacy:'"><img src="icons/11.gif" class="p"> <span id="l9" class="unselected">Manage store’s users, emails, opening hours, deviation type &amp; customer privacy:</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/update-store-layout.html" onclick="return LinkClick('10',false,true)" target="content" title="Update Store Layout:" onmousemove="window.status='Update Store Layout:'"><img src="icons/11.gif" class="p"> <span id="l10" class="unselected">Update Store Layout:</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/update-sequence-numbers.html" onclick="return LinkClick('11',false,true)" target="content" title="Update Sequence numbers:" onmousemove="window.status='Update Sequence numbers:'"><img src="icons/11.gif" class="p"> <span id="l11" class="unselected">Update Sequence numbers:</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/update-sms-provider.html" onclick="return LinkClick('12',false,true)" target="content" title="Update SMS Provider:" onmousemove="window.status='Update SMS Provider:'"><img src="icons/11.gif" class="p"> <span id="l12" class="unselected">Update SMS Provider:</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/update-other-sales.html" onclick="return LinkClick('13',false,true)" target="content" title="Update Other Sales:" onmousemove="window.status='Update Other Sales:'"><img src="icons/11.gif" class="p"> <span id="l13" class="unselected">Update Other Sales:</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/update-inventory.html" onclick="return LinkClick('14',false,true)" target="content" title="Update Inventory:" onmousemove="window.status='Update Inventory:'"><img src="icons/11.gif" class="p"> <span id="l14" class="unselected">Update Inventory:</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/update-hotel-category.html" onclick="return LinkClick('15',false,true)" target="content" title="Update Hotel Category:" onmousemove="window.status='Update Hotel Category:'"><img src="icons/11.gif" class="p"> <span id="l15" class="unselected">Update Hotel Category:</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/upangle.gif" class="p"><a href="pages/update-dekk-hotel-porter.html" onclick="return LinkClick('16',false,true)" target="content" title="Update Dekk Hotel Porter:" onmousemove="window.status='Update Dekk Hotel Porter:'"><img src="icons/11.gif" class="p"> <span id="l16" class="unselected">Update Dekk Hotel Porter:</span></a></nobr></div>
+</div></div></div><div><nobr><a href="#" onClick="return NodeClick('17')"><img id="imgn17" src="icons/tplus.gif" class="p"></a><a href="#" onclick="return LinkClick('17',true,false)" onDblClick="return LinkDblClick('17')" target="content" title="Orders" onmousemove="window.status='Orders'"><img id="img17" src="icons/1.gif" class="p"> <span id="l17" class="unselected">Orders</span></a></nobr></div>
+<div id="d17" style="display:none"><div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/order-for-own-stock-from-supplier.html" onclick="return LinkClick('18',false,true)" target="content" title="Order for own stock from supplier" onmousemove="window.status='Order for own stock from supplier'"><img src="icons/11.gif" class="p"> <span id="l18" class="unselected">Order for own stock from supplier</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/order-to-customer-from-supplier.html" onclick="return LinkClick('19',false,true)" target="content" title="Order to customer from supplier" onmousemove="window.status='Order to customer from supplier'"><img src="icons/11.gif" class="p"> <span id="l19" class="unselected">Order to customer from supplier</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/internal-purchase-order.html" onclick="return LinkClick('20',false,true)" target="content" title="Internal Purchase Order" onmousemove="window.status='Internal Purchase Order'"><img src="icons/11.gif" class="p"> <span id="l20" class="unselected">Internal Purchase Order</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/cancel-purchase-order.html" onclick="return LinkClick('21',false,true)" target="content" title="Cancel Purchase Order" onmousemove="window.status='Cancel Purchase Order'"><img src="icons/11.gif" class="p"> <span id="l21" class="unselected">Cancel Purchase Order</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/return-of-order.html" onclick="return LinkClick('22',false,true)" target="content" title="Return of Order" onmousemove="window.status='Return of Order'"><img src="icons/11.gif" class="p"> <span id="l22" class="unselected">Return of Order</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/receive-an-order.html" onclick="return LinkClick('23',false,true)" target="content" title="Receive an Order" onmousemove="window.status='Receive an Order'"><img src="icons/11.gif" class="p"> <span id="l23" class="unselected">Receive an Order</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><a href="#" onClick="return NodeClick('24')"><img id="imgn24" src="icons/tplus.gif" class="p"></a><a href="pages/add-new-supplier.html" onclick="return LinkClick('24',true,true)" onDblClick="return LinkDblClick('24')" target="content" title="Add new Supplier" onmousemove="window.status='Add new Supplier'"><img id="img24" src="icons/1.gif" class="p"> <span id="l24" class="unselected">Add new Supplier</span></a></nobr></div>
+<div id="d24" style="display:none"><div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/from-purchase-order-screen.html" onclick="return LinkClick('25',false,true)" target="content" title="From Purchase Order screen" onmousemove="window.status='From Purchase Order screen'"><img src="icons/11.gif" class="p"> <span id="l25" class="unselected">From Purchase Order screen</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/upangle.gif" class="p"><a href="pages/from-the-administration.html" onclick="return LinkClick('26',false,true)" target="content" title="From the administration" onmousemove="window.status='From the administration'"><img src="icons/11.gif" class="p"> <span id="l26" class="unselected">From the administration</span></a></nobr></div>
+</div><div><nobr><img src="icons/line.gif" class="p"><img src="icons/upangle.gif" class="p"><a href="pages/ordering-reservations.html" onclick="return LinkClick('27',false,true)" target="content" title="Ordering reservations" onmousemove="window.status='Ordering reservations'"><img src="icons/11.gif" class="p"> <span id="l27" class="unselected">Ordering reservations</span></a></nobr></div>
+</div><div><nobr><a href="#" onClick="return NodeClick('28')"><img id="imgn28" src="icons/tplus.gif" class="p"></a><a href="#" onclick="return LinkClick('28',true,false)" onDblClick="return LinkDblClick('28')" target="content" title="Sales" onmousemove="window.status='Sales'"><img id="img28" src="icons/1.gif" class="p"> <span id="l28" class="unselected">Sales</span></a></nobr></div>
+<div id="d28" style="display:none"><div><nobr><img src="icons/line.gif" class="p"><a href="#" onClick="return NodeClick('29')"><img id="imgn29" src="icons/tplus.gif" class="p"></a><a href="pages/search-orders-page.html" onclick="return LinkClick('29',true,true)" onDblClick="return LinkDblClick('29')" target="content" title="Search Orders page" onmousemove="window.status='Search Orders page'"><img id="img29" src="icons/1.gif" class="p"> <span id="l29" class="unselected">Search Orders page</span></a></nobr></div>
+<div id="d29" style="display:none"><div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/search-orders-by-order-status.html" onclick="return LinkClick('30',false,true)" target="content" title="Search orders by Order Status:" onmousemove="window.status='Search orders by Order Status:'"><img src="icons/11.gif" class="p"> <span id="l30" class="unselected">Search orders by Order Status:</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/search-orders-by-order-type.html" onclick="return LinkClick('31',false,true)" target="content" title="Search orders by Order Type:" onmousemove="window.status='Search orders by Order Type:'"><img src="icons/11.gif" class="p"> <span id="l31" class="unselected">Search orders by Order Type:</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/upangle.gif" class="p"><a href="pages/search-creditreturn-orders.html" onclick="return LinkClick('32',false,true)" target="content" title="Search Credit/Return orders:" onmousemove="window.status='Search Credit/Return orders:'"><img src="icons/11.gif" class="p"> <span id="l32" class="unselected">Search Credit/Return orders:</span></a></nobr></div>
+</div><div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/create-ordersale-page.html" onclick="return LinkClick('33',false,true)" target="content" title="Create Order/Sale page" onmousemove="window.status='Create Order/Sale page'"><img src="icons/11.gif" class="p"> <span id="l33" class="unselected">Create Order/Sale page</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><a href="#" onClick="return NodeClick('34')"><img id="imgn34" src="icons/tplus.gif" class="p"></a><a href="pages/search-product-sku--other-products-on-sale-screen.html" onclick="return LinkClick('34',true,true)" onDblClick="return LinkDblClick('34')" target="content" title="Search Product Sku &amp; Other Products on Sale screen" onmousemove="window.status='Search Product Sku &amp; Other Products on Sale screen'"><img id="img34" src="icons/1.gif" class="p"> <span id="l34" class="unselected">Search Product Sku &amp; Other Products on Sale screen</span></a></nobr></div>
+<div id="d34" style="display:none"><div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/product-sku-search.html" onclick="return LinkClick('35',false,true)" target="content" title="Product Sku search:" onmousemove="window.status='Product Sku search:'"><img src="icons/11.gif" class="p"> <span id="l35" class="unselected">Product Sku search:</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/upangle.gif" class="p"><a href="pages/other-product-search.html" onclick="return LinkClick('36',false,true)" target="content" title="Other Product search:" onmousemove="window.status='Other Product search:'"><img src="icons/11.gif" class="p"> <span id="l36" class="unselected">Other Product search:</span></a></nobr></div>
+</div><div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/create-salesoffersreservations.html" onclick="return LinkClick('37',false,true)" target="content" title="Create sales/offers/reservations" onmousemove="window.status='Create sales/offers/reservations'"><img src="icons/11.gif" class="p"> <span id="l37" class="unselected">Create sales/offers/reservations</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/manage-offers-and-reservations.html" onclick="return LinkClick('38',false,true)" target="content" title="Manage offers and reservations" onmousemove="window.status='Manage offers and reservations'"><img src="icons/11.gif" class="p"> <span id="l38" class="unselected">Manage offers and reservations</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/make-orders-with-products-from-norgesdekk.html" onclick="return LinkClick('39',false,true)" target="content" title="Make orders with products from Norgesdekk" onmousemove="window.status='Make orders with products from Norgesdekk'"><img src="icons/11.gif" class="p"> <span id="l39" class="unselected">Make orders with products from Norgesdekk</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/collect-order-from-supplier.html" onclick="return LinkClick('40',false,true)" target="content" title="Collect Order from Supplier" onmousemove="window.status='Collect Order from Supplier'"><img src="icons/11.gif" class="p"> <span id="l40" class="unselected">Collect Order from Supplier</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/invoicing.html" onclick="return LinkClick('41',false,true)" target="content" title="Invoicing" onmousemove="window.status='Invoicing'"><img src="icons/11.gif" class="p"> <span id="l41" class="unselected">Invoicing</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/day-end-closing.html" onclick="return LinkClick('42',false,true)" target="content" title="Day-end closing" onmousemove="window.status='Day-end closing'"><img src="icons/11.gif" class="p"> <span id="l42" class="unselected">Day-end closing</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/manedsavslutning.html" onclick="return LinkClick('43',false,true)" target="content" title="Månedsavslutning" onmousemove="window.status='Månedsavslutning'"><img src="icons/11.gif" class="p"> <span id="l43" class="unselected">Månedsavslutning</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/upangle.gif" class="p"><a href="pages/month-ending-list.html" onclick="return LinkClick('44',false,true)" target="content" title="Month Ending List" onmousemove="window.status='Month Ending List'"><img src="icons/11.gif" class="p"> <span id="l44" class="unselected">Month Ending List</span></a></nobr></div>
+</div><div><nobr><a href="#" onClick="return NodeClick('45')"><img id="imgn45" src="icons/tplus.gif" class="p"></a><a href="#" onclick="return LinkClick('45',true,false)" onDblClick="return LinkDblClick('45')" target="content" title="Inventory" onmousemove="window.status='Inventory'"><img id="img45" src="icons/1.gif" class="p"> <span id="l45" class="unselected">Inventory</span></a></nobr></div>
+<div id="d45" style="display:none"><div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/check-stock-status.html" onclick="return LinkClick('46',false,true)" target="content" title="Check stock status" onmousemove="window.status='Check stock status'"><img src="icons/11.gif" class="p"> <span id="l46" class="unselected">Check stock status</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/confirm-order.html" onclick="return LinkClick('47',false,true)" target="content" title="Confirm Order" onmousemove="window.status='Confirm Order'"><img src="icons/11.gif" class="p"> <span id="l47" class="unselected">Confirm Order</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><a href="#" onClick="return NodeClick('48')"><img id="imgn48" src="icons/uaplus.gif" class="p"></a><a href="pages/create-new-items-in-inventory.html" onclick="return LinkClick('48',true,true)" onDblClick="return LinkDblClick('48')" target="content" title="Create new items in Inventory" onmousemove="window.status='Create new items in Inventory'"><img id="img48" src="icons/1.gif" class="p"> <span id="l48" class="unselected">Create new items in Inventory</span></a></nobr></div>
+<div id="d48" style="display:none"><div><nobr><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/diverse---utvalg--sortiment.html" onclick="return LinkClick('49',false,true)" target="content" title="Diverse -&gt; Utvalg / Sortiment" onmousemove="window.status='Diverse -&gt; Utvalg / Sortiment'"><img src="icons/11.gif" class="p"> <span id="l49" class="unselected">Diverse -&gt; Utvalg / Sortiment</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/upangle.gif" class="p"><a href="pages/when-ordering.html" onclick="return LinkClick('50',false,true)" target="content" title="When ordering" onmousemove="window.status='When ordering'"><img src="icons/11.gif" class="p"> <span id="l50" class="unselected">When ordering</span></a></nobr></div>
+</div></div><div><nobr><a href="#" onClick="return NodeClick('51')"><img id="imgn51" src="icons/tplus.gif" class="p"></a><a href="#" onclick="return LinkClick('51',true,false)" onDblClick="return LinkDblClick('51')" target="content" title="Dekk Hotel" onmousemove="window.status='Dekk Hotel'"><img id="img51" src="icons/1.gif" class="p"> <span id="l51" class="unselected">Dekk Hotel</span></a></nobr></div>
+<div id="d51" style="display:none"><div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/dekk-hotel-demo-clips.html" onclick="return LinkClick('52',false,true)" target="content" title="Dekk Hotel Demo Clips" onmousemove="window.status='Dekk Hotel Demo Clips'"><img src="icons/11.gif" class="p"> <span id="l52" class="unselected">Dekk Hotel Demo Clips</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><a href="#" onClick="return NodeClick('53')"><img id="imgn53" src="icons/tplus.gif" class="p"></a><a href="pages/dekk-hotel-setup.html" onclick="return LinkClick('53',true,true)" onDblClick="return LinkDblClick('53')" target="content" title="Dekk Hotel Setup" onmousemove="window.status='Dekk Hotel Setup'"><img id="img53" src="icons/1.gif" class="p"> <span id="l53" class="unselected">Dekk Hotel Setup</span></a></nobr></div>
+<div id="d53" style="display:none"><div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/hotel.html" onclick="return LinkClick('54',false,true)" target="content" title="Hotel" onmousemove="window.status='Hotel'"><img src="icons/11.gif" class="p"> <span id="l54" class="unselected">Hotel</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/hotel-section.html" onclick="return LinkClick('55',false,true)" target="content" title="Hotel Section" onmousemove="window.status='Hotel Section'"><img src="icons/11.gif" class="p"> <span id="l55" class="unselected">Hotel Section</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/dekk-type.html" onclick="return LinkClick('56',false,true)" target="content" title="Dekk type" onmousemove="window.status='Dekk type'"><img src="icons/11.gif" class="p"> <span id="l56" class="unselected">Dekk type</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/felg-type.html" onclick="return LinkClick('57',false,true)" target="content" title="Felg type" onmousemove="window.status='Felg type'"><img src="icons/11.gif" class="p"> <span id="l57" class="unselected">Felg type</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/plassering-placement.html" onclick="return LinkClick('58',false,true)" target="content" title="Plassering (Placement)" onmousemove="window.status='Plassering (Placement)'"><img src="icons/11.gif" class="p"> <span id="l58" class="unselected">Plassering (Placement)</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/hotel-categories.html" onclick="return LinkClick('59',false,true)" target="content" title="Hotel Categories" onmousemove="window.status='Hotel Categories'"><img src="icons/11.gif" class="p"> <span id="l59" class="unselected">Hotel Categories</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/porter.html" onclick="return LinkClick('60',false,true)" target="content" title="Porter" onmousemove="window.status='Porter'"><img src="icons/11.gif" class="p"> <span id="l60" class="unselected">Porter</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/config-time-slots.html" onclick="return LinkClick('61',false,true)" target="content" title="Config time slots" onmousemove="window.status='Config time slots'"><img src="icons/11.gif" class="p"> <span id="l61" class="unselected">Config time slots</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/upangle.gif" class="p"><a href="pages/sms-provider-setup.html" onclick="return LinkClick('62',false,true)" target="content" title="SMS Provider Setup" onmousemove="window.status='SMS Provider Setup'"><img src="icons/11.gif" class="p"> <span id="l62" class="unselected">SMS Provider Setup</span></a></nobr></div>
+</div><div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/create-new-hotel-user.html" onclick="return LinkClick('63',false,true)" target="content" title="Create New Hotel User" onmousemove="window.status='Create New Hotel User'"><img src="icons/11.gif" class="p"> <span id="l63" class="unselected">Create New Hotel User</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><a href="#" onClick="return NodeClick('64')"><img id="imgn64" src="icons/tplus.gif" class="p"></a><a href="#" onclick="return LinkClick('64',true,false)" onDblClick="return LinkDblClick('64')" target="content" title="Change Wheel" onmousemove="window.status='Change Wheel'"><img id="img64" src="icons/1.gif" class="p"> <span id="l64" class="unselected">Change Wheel</span></a></nobr></div>
+<div id="d64" style="display:none"><div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/reserve-wheel-change-time.html" onclick="return LinkClick('65',false,true)" target="content" title="Reserve wheel change time" onmousemove="window.status='Reserve wheel change time'"><img src="icons/11.gif" class="p"> <span id="l65" class="unselected">Reserve wheel change time</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/carry-out-wheel-changes.html" onclick="return LinkClick('66',false,true)" target="content" title="Carry out wheel changes" onmousemove="window.status='Carry out wheel changes'"><img src="icons/11.gif" class="p"> <span id="l66" class="unselected">Carry out wheel changes</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/upangle.gif" class="p"><a href="pages/reservation.html" onclick="return LinkClick('67',false,true)" target="content" title="Reservation" onmousemove="window.status='Reservation'"><img src="icons/11.gif" class="p"> <span id="l67" class="unselected">Reservation</span></a></nobr></div>
+</div><div><nobr><img src="icons/line.gif" class="p"><a href="#" onClick="return NodeClick('68')"><img id="imgn68" src="icons/tplus.gif" class="p"></a><a href="#" onclick="return LinkClick('68',true,false)" onDblClick="return LinkDblClick('68')" target="content" title="DekkHotel Search and SMS" onmousemove="window.status='DekkHotel Search and SMS'"><img id="img68" src="icons/1.gif" class="p"> <span id="l68" class="unselected">DekkHotel Search and SMS</span></a></nobr></div>
+<div id="d68" style="display:none"><div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/dekkhotel-search.html" onclick="return LinkClick('69',false,true)" target="content" title="DekkHotel Search" onmousemove="window.status='DekkHotel Search'"><img src="icons/11.gif" class="p"> <span id="l69" class="unselected">DekkHotel Search</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/search-available-or-used-dekk-hotel-locations.html" onclick="return LinkClick('70',false,true)" target="content" title="Search available or used dekk hotel locations" onmousemove="window.status='Search available or used dekk hotel locations'"><img src="icons/11.gif" class="p"> <span id="l70" class="unselected">Search available or used dekk hotel locations</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/delete-a-hotel-customer.html" onclick="return LinkClick('71',false,true)" target="content" title="Delete a hotel customer" onmousemove="window.status='Delete a hotel customer'"><img src="icons/11.gif" class="p"> <span id="l71" class="unselected">Delete a hotel customer</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/upangle.gif" class="p"><a href="pages/restore-a-deleted-wheel-set.html" onclick="return LinkClick('72',false,true)" target="content" title="Restore a deleted wheel set" onmousemove="window.status='Restore a deleted wheel set'"><img src="icons/11.gif" class="p"> <span id="l72" class="unselected">Restore a deleted wheel set</span></a></nobr></div>
+</div><div><nobr><img src="icons/line.gif" class="p"><a href="#" onClick="return NodeClick('73')"><img id="imgn73" src="icons/tplus.gif" class="p"></a><a href="pages/create-time-planschedule.html" onclick="return LinkClick('73',true,true)" onDblClick="return LinkDblClick('73')" target="content" title="Create Time plan/Schedule" onmousemove="window.status='Create Time plan/Schedule'"><img id="img73" src="icons/1.gif" class="p"> <span id="l73" class="unselected">Create Time plan/Schedule</span></a></nobr></div>
+<div id="d73" style="display:none"><div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><a href="#" onClick="return NodeClick('74')"><img id="imgn74" src="icons/tplus.gif" class="p"></a><a href="#" onclick="return LinkClick('74',true,false)" onDblClick="return LinkDblClick('74')" target="content" title="From time plan screen" onmousemove="window.status='From time plan screen'"><img id="img74" src="icons/1.gif" class="p"> <span id="l74" class="unselected">From time plan screen</span></a></nobr></div>
+<div id="d74" style="display:none"><div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/go-into-timeplan---registrer-avtale.html" onclick="return LinkClick('75',false,true)" target="content" title="Go into Timeplan -&gt; Registrer avtale" onmousemove="window.status='Go into Timeplan -&gt; Registrer avtale'"><img src="icons/11.gif" class="p"> <span id="l75" class="unselected">Go into Timeplan -&gt; Registrer avtale</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/add-a-new-appointment-or-a-new-reserved-time.html" onclick="return LinkClick('76',false,true)" target="content" title="Add a new appointment or a new reserved time" onmousemove="window.status='Add a new appointment or a new reserved time'"><img src="icons/11.gif" class="p"> <span id="l76" class="unselected">Add a new appointment or a new reserved time</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/change-a-wheel.html" onclick="return LinkClick('77',false,true)" target="content" title="Change a wheel" onmousemove="window.status='Change a wheel'"><img src="icons/11.gif" class="p"> <span id="l77" class="unselected">Change a wheel</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/upangle.gif" class="p"><a href="pages/move-hour.html" onclick="return LinkClick('78',false,true)" target="content" title="Move hour" onmousemove="window.status='Move hour'"><img src="icons/11.gif" class="p"> <span id="l78" class="unselected">Move hour</span></a></nobr></div>
+</div><div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><a href="#" onClick="return NodeClick('79')"><img id="imgn79" src="icons/tplus.gif" class="p"></a><a href="pages/from-quick-post.html" onclick="return LinkClick('79',true,true)" onDblClick="return LinkDblClick('79')" target="content" title="From quick post" onmousemove="window.status='From quick post'"><img id="img79" src="icons/1.gif" class="p"> <span id="l79" class="unselected">From quick post</span></a></nobr></div>
+<div id="d79" style="display:none"><div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/manual-quick-post.html" onclick="return LinkClick('80',false,true)" target="content" title="Manual quick post" onmousemove="window.status='Manual quick post'"><img src="icons/11.gif" class="p"> <span id="l80" class="unselected">Manual quick post</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/upangle.gif" class="p"><a href="pages/autofyll.html" onclick="return LinkClick('81',false,true)" target="content" title="Autofyll" onmousemove="window.status='Autofyll'"><img src="icons/11.gif" class="p"> <span id="l81" class="unselected">Autofyll</span></a></nobr></div>
+</div><div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/from-the-web.html" onclick="return LinkClick('82',false,true)" target="content" title="From the web" onmousemove="window.status='From the web'"><img src="icons/11.gif" class="p"> <span id="l82" class="unselected">From the web</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/upangle.gif" class="p"><a href="pages/customer-arrives-before-the-agreed-time.html" onclick="return LinkClick('83',false,true)" target="content" title="Customer arrives before the agreed time" onmousemove="window.status='Customer arrives before the agreed time'"><img src="icons/11.gif" class="p"> <span id="l83" class="unselected">Customer arrives before the agreed time</span></a></nobr></div>
+</div><div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/schedule-printing.html" onclick="return LinkClick('84',false,true)" target="content" title="Schedule Printing" onmousemove="window.status='Schedule Printing'"><img src="icons/11.gif" class="p"> <span id="l84" class="unselected">Schedule Printing</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/deleting-a-day-in-schedule.html" onclick="return LinkClick('85',false,true)" target="content" title="Deleting a day in schedule" onmousemove="window.status='Deleting a day in schedule'"><img src="icons/11.gif" class="p"> <span id="l85" class="unselected">Deleting a day in schedule</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/upangle.gif" class="p"><a href="pages/deleting-a-port-for-a-day.html" onclick="return LinkClick('86',false,true)" target="content" title="Deleting a port for a day" onmousemove="window.status='Deleting a port for a day'"><img src="icons/11.gif" class="p"> <span id="l86" class="unselected">Deleting a port for a day</span></a></nobr></div>
+</div><div><nobr><a href="#" onClick="return NodeClick('87')"><img id="imgn87" src="icons/tplus.gif" class="p"></a><a href="#" onclick="return LinkClick('87',true,false)" onDblClick="return LinkDblClick('87')" target="content" title="Invoice" onmousemove="window.status='Invoice'"><img id="img87" src="icons/1.gif" class="p"> <span id="l87" class="unselected">Invoice</span></a></nobr></div>
+<div id="d87" style="display:none"><div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/get-a-pdf-with-all-invoices-for-a-period-of-time.html" onclick="return LinkClick('88',false,true)" target="content" title="Get a pdf with ALL invoices for a period of time" onmousemove="window.status='Get a pdf with ALL invoices for a period of time'"><img src="icons/11.gif" class="p"> <span id="l88" class="unselected">Get a pdf with ALL invoices for a period of time</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><a href="#" onClick="return NodeClick('89')"><img id="imgn89" src="icons/tplus.gif" class="p"></a><a href="#" onclick="return LinkClick('89',true,false)" onDblClick="return LinkDblClick('89')" target="content" title="Billing Fee and Interest Provisions" onmousemove="window.status='Billing Fee and Interest Provisions'"><img id="img89" src="icons/1.gif" class="p"> <span id="l89" class="unselected">Billing Fee and Interest Provisions</span></a></nobr></div>
+<div id="d89" style="display:none"><div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/purring-and-debt-collection.html" onclick="return LinkClick('90',false,true)" target="content" title="Purring and debt collection" onmousemove="window.status='Purring and debt collection'"><img src="icons/11.gif" class="p"> <span id="l90" class="unselected">Purring and debt collection</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/fee.html" onclick="return LinkClick('91',false,true)" target="content" title="Fee" onmousemove="window.status='Fee'"><img src="icons/11.gif" class="p"> <span id="l91" class="unselected">Fee</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/late-payment.html" onclick="return LinkClick('92',false,true)" target="content" title="Late payment" onmousemove="window.status='Late payment'"><img src="icons/11.gif" class="p"> <span id="l92" class="unselected">Late payment</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/interest-rate.html" onclick="return LinkClick('93',false,true)" target="content" title="Interest rate" onmousemove="window.status='Interest rate'"><img src="icons/11.gif" class="p"> <span id="l93" class="unselected">Interest rate</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/delay-rate-between-traders.html" onclick="return LinkClick('94',false,true)" target="content" title="Delay rate between traders" onmousemove="window.status='Delay rate between traders'"><img src="icons/11.gif" class="p"> <span id="l94" class="unselected">Delay rate between traders</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/delay-rate-in-consumer-conditions.html" onclick="return LinkClick('95',false,true)" target="content" title="Delay rate in consumer conditions" onmousemove="window.status='Delay rate in consumer conditions'"><img src="icons/11.gif" class="p"> <span id="l95" class="unselected">Delay rate in consumer conditions</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/standard-compensation.html" onclick="return LinkClick('96',false,true)" target="content" title="Standard Compensation" onmousemove="window.status='Standard Compensation'"><img src="icons/11.gif" class="p"> <span id="l96" class="unselected">Standard Compensation</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/purring.html" onclick="return LinkClick('97',false,true)" target="content" title="Purring" onmousemove="window.status='Purring'"><img src="icons/11.gif" class="p"> <span id="l97" class="unselected">Purring</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/debt-warning.html" onclick="return LinkClick('98',false,true)" target="content" title="Debt Warning" onmousemove="window.status='Debt Warning'"><img src="icons/11.gif" class="p"> <span id="l98" class="unselected">Debt Warning</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/disputed-claims.html" onclick="return LinkClick('99',false,true)" target="content" title="Disputed claims" onmousemove="window.status='Disputed claims'"><img src="icons/11.gif" class="p"> <span id="l99" class="unselected">Disputed claims</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/transfer-the-case-to-debt-collection-company-forei.html" onclick="return LinkClick('100',false,true)" target="content" title="Transfer the case to debt collection company (foreign debt collection)" onmousemove="window.status='Transfer the case to debt collection company (foreign debt collection)'"><img src="icons/11.gif" class="p"> <span id="l100" class="unselected">Transfer the case to debt collection company (foreign debt collection)</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/private-debt-collection.html" onclick="return LinkClick('101',false,true)" target="content" title="Private Debt Collection" onmousemove="window.status='Private Debt Collection'"><img src="icons/11.gif" class="p"> <span id="l101" class="unselected">Private Debt Collection</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/collection.html" onclick="return LinkClick('102',false,true)" target="content" title="Collection" onmousemove="window.status='Collection'"><img src="icons/11.gif" class="p"> <span id="l102" class="unselected">Collection</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/legal-debt-collection--enforcement-by-self-collect.html" onclick="return LinkClick('103',false,true)" target="content" title="Legal debt collection / Enforcement by self-collection" onmousemove="window.status='Legal debt collection / Enforcement by self-collection'"><img src="icons/11.gif" class="p"> <span id="l103" class="unselected">Legal debt collection / Enforcement by self-collection</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/upangle.gif" class="p"><a href="pages/example.html" onclick="return LinkClick('104',false,true)" target="content" title="Example:" onmousemove="window.status='Example:'"><img src="icons/11.gif" class="p"> <span id="l104" class="unselected">Example:</span></a></nobr></div>
+</div><div><nobr><img src="icons/line.gif" class="p"><a href="#" onClick="return NodeClick('105')"><img id="imgn105" src="icons/tplus.gif" class="p"></a><a href="#" onclick="return LinkClick('105',true,false)" onDblClick="return LinkDblClick('105')" target="content" title="EHF Billing Overview" onmousemove="window.status='EHF Billing Overview'"><img id="img105" src="icons/1.gif" class="p"> <span id="l105" class="unselected">EHF Billing Overview</span></a></nobr></div>
+<div id="d105" style="display:none"><div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/ehf-customer-setup.html" onclick="return LinkClick('106',false,true)" target="content" title="EHF customer setup" onmousemove="window.status='EHF customer setup'"><img src="icons/11.gif" class="p"> <span id="l106" class="unselected">EHF customer setup</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/upangle.gif" class="p"><a href="pages/ehf-invoice-management.html" onclick="return LinkClick('107',false,true)" target="content" title="EHF Invoice Management" onmousemove="window.status='EHF Invoice Management'"><img src="icons/11.gif" class="p"> <span id="l107" class="unselected">EHF Invoice Management</span></a></nobr></div>
+</div><div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/create-kid-number.html" onclick="return LinkClick('108',false,true)" target="content" title="Create KID number" onmousemove="window.status='Create KID number'"><img src="icons/11.gif" class="p"> <span id="l108" class="unselected">Create KID number</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/upangle.gif" class="p"><a href="pages/change-of-invoice-date.html" onclick="return LinkClick('109',false,true)" target="content" title="Change of invoice date" onmousemove="window.status='Change of invoice date'"><img src="icons/11.gif" class="p"> <span id="l109" class="unselected">Change of invoice date</span></a></nobr></div>
+</div><div><nobr><a href="#" onClick="return NodeClick('110')"><img id="imgn110" src="icons/tplus.gif" class="p"></a><a href="#" onclick="return LinkClick('110',true,false)" onDblClick="return LinkDblClick('110')" target="content" title="Customer" onmousemove="window.status='Customer'"><img id="img110" src="icons/1.gif" class="p"> <span id="l110" class="unselected">Customer</span></a></nobr></div>
+<div id="d110" style="display:none"><div><nobr><img src="icons/line.gif" class="p"><a href="#" onClick="return NodeClick('111')"><img id="imgn111" src="icons/tplus.gif" class="p"></a><a href="pages/block-a-customer.html" onclick="return LinkClick('111',true,true)" onDblClick="return LinkDblClick('111')" target="content" title="Block a customer" onmousemove="window.status='Block a customer'"><img id="img111" src="icons/1.gif" class="p"> <span id="l111" class="unselected">Block a customer</span></a></nobr></div>
+<div id="d111" style="display:none"><div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/customer-card-contact---customers.html" onclick="return LinkClick('112',false,true)" target="content" title="(Customer Card) Contact -&gt; Customers" onmousemove="window.status='(Customer Card) Contact -&gt; Customers'"><img src="icons/11.gif" class="p"> <span id="l112" class="unselected">(Customer Card) Contact -&gt; Customers</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/customer-sales-view-sales---sales.html" onclick="return LinkClick('113',false,true)" target="content" title="(Customer Sales View) Sales -&gt; Sales" onmousemove="window.status='(Customer Sales View) Sales -&gt; Sales'"><img src="icons/11.gif" class="p"> <span id="l113" class="unselected">(Customer Sales View) Sales -&gt; Sales</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/upangle.gif" class="p"><a href="pages/show-blocked-customers.html" onclick="return LinkClick('114',false,true)" target="content" title="Show blocked customers" onmousemove="window.status='Show blocked customers'"><img src="icons/11.gif" class="p"> <span id="l114" class="unselected">Show blocked customers</span></a></nobr></div>
+</div><div><nobr><img src="icons/line.gif" class="p"><a href="#" onClick="return NodeClick('115')"><img id="imgn115" src="icons/uaplus.gif" class="p"></a><a href="pages/customer-discount.html" onclick="return LinkClick('115',true,true)" onDblClick="return LinkDblClick('115')" target="content" title="Customer Discount" onmousemove="window.status='Customer Discount'"><img id="img115" src="icons/1.gif" class="p"> <span id="l115" class="unselected">Customer Discount</span></a></nobr></div>
+<div id="d115" style="display:none"><div><nobr><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/create-a-discount-group.html" onclick="return LinkClick('116',false,true)" target="content" title="Create a discount group" onmousemove="window.status='Create a discount group'"><img src="icons/11.gif" class="p"> <span id="l116" class="unselected">Create a discount group</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/define-discounts-in-discount-group.html" onclick="return LinkClick('117',false,true)" target="content" title="Define discounts in discount group" onmousemove="window.status='Define discounts in discount group'"><img src="icons/11.gif" class="p"> <span id="l117" class="unselected">Define discounts in discount group</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="pages/create-a-discount-agreement.html" onclick="return LinkClick('118',false,true)" target="content" title="Create a discount agreement" onmousemove="window.status='Create a discount agreement'"><img src="icons/11.gif" class="p"> <span id="l118" class="unselected">Create a discount agreement</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/upangle.gif" class="p"><a href="pages/recommended-retail-price.html" onclick="return LinkClick('119',false,true)" target="content" title="Recommended retail price" onmousemove="window.status='Recommended retail price'"><img src="icons/11.gif" class="p"> <span id="l119" class="unselected">Recommended retail price</span></a></nobr></div>
+</div></div><div><nobr><a href="#" onClick="return NodeClick('120')"><img id="imgn120" src="icons/tplus.gif" class="p"></a><a href="#" onclick="return LinkClick('120',true,false)" onDblClick="return LinkDblClick('120')" target="content" title="Accounting" onmousemove="window.status='Accounting'"><img id="img120" src="icons/1.gif" class="p"> <span id="l120" class="unselected">Accounting</span></a></nobr></div>
+<div id="d120" style="display:none"><div><nobr><img src="icons/line.gif" class="p"><img src="icons/upangle.gif" class="p"><a href="pages/account-number-by-category.html" onclick="return LinkClick('121',false,true)" target="content" title="Account number by Category" onmousemove="window.status='Account number by Category'"><img src="icons/11.gif" class="p"> <span id="l121" class="unselected">Account number by Category</span></a></nobr></div>
+</div><div><nobr><img src="icons/tshaped.gif" class="p"><a href="pages/reports.html" onclick="return LinkClick('122',false,true)" target="content" title="Reports" onmousemove="window.status='Reports'"><img src="icons/11.gif" class="p"> <span id="l122" class="unselected">Reports</span></a></nobr></div>
+<div><nobr><a href="#" onClick="return NodeClick('123')"><img id="imgn123" src="icons/uaplus.gif" class="p"></a><a href="#" onclick="return LinkClick('123',true,false)" onDblClick="return LinkDblClick('123')" target="content" title="Others" onmousemove="window.status='Others'"><img id="img123" src="icons/1.gif" class="p"> <span id="l123" class="unselected">Others</span></a></nobr></div>
+<div id="d123" style="display:none"><div><nobr><img src="icons/blank.gif" class="p"><img src="icons/upangle.gif" class="p"><a href="pages/set-up-direct-printing.html" onclick="return LinkClick('124',false,true)" target="content" title="Set up Direct Printing" onmousemove="window.status='Set up Direct Printing'"><img src="icons/11.gif" class="p"> <span id="l124" class="unselected">Set up Direct Printing</span></a></nobr></div>
+</div><script>divlist = [1,4,5,6,17,24,28,29,34,45,48,51,53,64,68,73,74,79,87,89,105,110,111,115,120,123]</script>
+</body>
+</html>
